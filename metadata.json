@@ -1,0 +1,6 @@
+{
+  "name": "Smart Barcode POS & Billing System",
+  "description": "Fast retail billing system with barcode generation and scanning, GST calculation, salesman performance tracking, multi-payment options, invoice printing, and sales reporting.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
