@@ -43,7 +43,7 @@ export const BillingView: React.FC<BillingViewProps> = ({
 }) => {
   // Active Salesman
   const [selectedSalesmanId, setSelectedSalesmanId] = useState<string>(
-    salesmen[0]?.id || ''
+    salesmen[0]?.id || 'sls_direct'
   );
 
   // Bill Customer
@@ -277,14 +277,16 @@ export const BillingView: React.FC<BillingViewProps> = ({
       return;
     }
 
-    const salesman = salesmen.find((s) => s.id === selectedSalesmanId) || salesmen[0];
+    const salesmanObj = salesmen.find((s) => s.id === selectedSalesmanId);
+    const salesmanId = salesmanObj ? salesmanObj.id : 'sls_direct';
+    const salesmanName = salesmanObj ? salesmanObj.name : 'Direct Counter (No Salesman)';
 
     const newBill: Partial<Bill> = {
       date: new Date().toISOString(),
       cashierId: currentUser.id,
       cashierName: currentUser.name,
-      salesmanId: salesman.id,
-      salesmanName: salesman.name,
+      salesmanId,
+      salesmanName,
       customerName: customerName.trim() || undefined,
       customerPhone: customerPhone.trim() || undefined,
       items,
@@ -361,6 +363,7 @@ export const BillingView: React.FC<BillingViewProps> = ({
                 className="w-full text-xs font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
                 id="salesman-select"
               >
+                <option value="sls_direct">Direct Counter (No Salesman)</option>
                 {salesmen.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name} ({s.code})

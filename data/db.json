@@ -25,10 +25,27 @@
       "active": true,
       "pin": "1234",
       "createdAt": "2026-07-26T00:00:00.000Z"
+    },
+    {
+      "username": "konda1",
+      "name": "Konda",
+      "role": "cashier",
+      "pin": "1234",
+      "active": true,
+      "id": "usr_1785072234907",
+      "createdAt": "2026-07-26T13:23:54.907Z"
     }
   ],
   "bills": [],
   "auditLogs": [
+    {
+      "id": "log_1785072234909_zpxw",
+      "timestamp": "2026-07-26T13:23:54.909Z",
+      "userId": "usr_admin",
+      "userName": "Admin",
+      "action": "CREATE_USER",
+      "details": "Created user account: konda1 (cashier)"
+    },
     {
       "id": "log_1",
       "timestamp": "2026-07-26T00:00:00.000Z",

@@ -13,7 +13,7 @@ import { SalesmenView } from './components/views/SalesmenView';
 import { StoreSettingsView } from './components/views/StoreSettingsView';
 import { UserManagementView } from './components/views/UserManagementView';
 import { AuditLogView } from './components/views/AuditLogView';
-import { LoginModal } from './components/LoginModal';
+import { LoginPage } from './components/LoginPage';
 import { ShortcutsGuideModal } from './components/ShortcutsGuideModal';
 import {
   initialStoreConfig,
@@ -35,9 +35,16 @@ export default function App() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
-  // Current User Session
-  const [currentUser, setCurrentUser] = useState<User | null>(initialUsers[0]);
-  const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
+  // Current User Session (Persisted in localStorage)
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    const savedUserId = localStorage.getItem('pos_current_user_id');
+    if (!savedUserId || savedUserId === 'null') return null;
+    return initialUsers.find((u) => u.id === savedUserId) || null;
+  });
+  const [isLoginOpen, setIsLoginOpen] = useState<boolean>(() => {
+    const savedUserId = localStorage.getItem('pos_current_user_id');
+    return !savedUserId || savedUserId === 'null';
+  });
 
   // Shortcuts Modal
   const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
@@ -64,9 +71,21 @@ export default function App() {
       setBills(bls);
       setAuditLogs(lgs);
 
-      // Ensure active user is still valid
-      if (usrs.length > 0 && !usrs.some((u) => u.id === currentUser?.id)) {
-        setCurrentUser(usrs[0]);
+      // Validate session user against database
+      const savedUserId = localStorage.getItem('pos_current_user_id');
+      if (savedUserId && savedUserId !== 'null') {
+        const found = usrs.find((u) => u.id === savedUserId && u.active);
+        if (found) {
+          setCurrentUser(found);
+          setIsLoginOpen(false);
+        } else {
+          setCurrentUser(null);
+          setIsLoginOpen(true);
+          localStorage.removeItem('pos_current_user_id');
+        }
+      } else {
+        setCurrentUser(null);
+        setIsLoginOpen(true);
       }
     } catch (err) {
       console.warn('API load fallback to initial seed data:', err);
@@ -138,30 +157,31 @@ export default function App() {
     setStoreConfig(updated);
   };
 
-  // Theme State
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('pos_theme') as 'light' | 'dark') || 'light';
-  });
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    localStorage.setItem('pos_theme', nextTheme);
-  };
-
   if (!currentUser || isLoginOpen) {
-    return <LoginModal users={users} onLogin={(user) => { setCurrentUser(user); setIsLoginOpen(false); }} />;
+    return (
+      <LoginPage
+        users={users}
+        storeConfig={storeConfig}
+        onLogin={(user) => {
+          setCurrentUser(user);
+          setIsLoginOpen(false);
+          localStorage.setItem('pos_current_user_id', user.id);
+        }}
+      />
+    );
   }
 
   return (
-    <div className={`h-screen w-screen flex flex-col overflow-hidden font-sans antialiased text-slate-800 select-none ${theme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'}`}>
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-100 font-sans antialiased text-slate-800 select-none">
       {/* Top Navbar */}
       <Navbar
         user={currentUser}
         storeConfig={storeConfig}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        onLogout={() => setIsLoginOpen(true)}
+        onLogout={() => {
+          setCurrentUser(null);
+          setIsLoginOpen(true);
+          localStorage.removeItem('pos_current_user_id');
+        }}
         onOpenShortcutsModal={() => setIsShortcutsOpen(true)}
       />
 
@@ -172,7 +192,6 @@ export default function App() {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           role={currentUser.role}
-          theme={theme}
         />
 
         {/* Dynamic Main View */}
