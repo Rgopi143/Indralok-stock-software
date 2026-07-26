@@ -66,9 +66,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <h1 className="font-extrabold text-base tracking-tight leading-none text-white">
               {storeConfig.storeName}
             </h1>
-            <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
-              POS v2.5
-            </span>
           </div>
           <p className="text-[11px] text-slate-400 font-medium hidden sm:block">
             {storeConfig.tagline} • GSTIN: {storeConfig.gstin}
