@@ -70,12 +70,26 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
   const existingCategories = Array.from(new Set(products.map((p) => p.category)));
   const allCategoriesList = Array.from(new Set(['All', ...APPAREL_CATEGORIES, ...existingCategories]));
 
+  const generateNextSerialBarcode = (): string => {
+    let maxSerial = 10000;
+    products.forEach((p) => {
+      const num = parseInt(p.barcode.replace(/\D/g, ''), 10);
+      if (!isNaN(num) && num > maxSerial) {
+        maxSerial = num;
+      }
+    });
+    return String(maxSerial + 1);
+  };
+
+  const generateEanBarcode = (): string => {
+    return `890${Math.floor(100000000 + Math.random() * 900000000)}`;
+  };
+
   const handleOpenAddModal = () => {
     setEditingProduct(null);
     setFormName('');
     setFormCategory('Shirts & T-Shirts');
-    const autoBarcode = `890${Math.floor(100000000 + Math.random() * 900000000)}`;
-    setFormBarcode(autoBarcode);
+    setFormBarcode(generateNextSerialBarcode());
     setFormMrp(999);
     setFormSellingPrice(799);
     setFormGstPercent(5);
@@ -438,23 +452,32 @@ export const ProductsView: React.FC<ProductsViewProps> = ({
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="font-bold text-slate-700">Tag Barcode Value *</label>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFormBarcode(`890${Math.floor(100000000 + Math.random() * 900000000)}`)
-                      }
-                      className="text-[10px] font-bold text-indigo-600 hover:underline"
-                    >
-                      Auto Generate
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setFormBarcode(generateNextSerialBarcode())}
+                        className="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200 hover:bg-indigo-100"
+                        title="Auto increment next sequential tag number"
+                      >
+                        +1 Next Serial
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormBarcode(generateEanBarcode())}
+                        className="text-[10px] font-bold text-slate-500 hover:text-slate-800 hover:underline"
+                        title="Generate 12-digit EAN barcode starting with 890"
+                      >
+                        EAN-13
+                      </button>
+                    </div>
                   </div>
                   <input
                     type="text"
                     required
                     value={formBarcode}
                     onChange={(e) => setFormBarcode(e.target.value)}
-                    placeholder="Barcode Number"
-                    className="w-full p-2.5 border border-slate-300 rounded-xl font-mono focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Enter or scan tag barcode (e.g. 10001)"
+                    className="w-full p-2.5 border border-slate-300 rounded-xl font-mono focus:ring-2 focus:ring-indigo-500 font-bold"
                   />
                 </div>
 
