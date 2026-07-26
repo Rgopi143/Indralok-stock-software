@@ -48,27 +48,14 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
   return (
     <div className="flex-1 p-4 md:p-6 bg-slate-100 overflow-y-auto space-y-6">
-      {/* HEADER */}
-      <div className="flex justify-between items-center bg-white p-5 rounded-2xl shadow-xs border border-slate-200">
-        <div>
-          <div className="flex items-center gap-2">
-            <FileSpreadsheet className="w-6 h-6 text-slate-700" />
-            <h2 className="text-xl font-extrabold text-slate-900">Database Backup & Audit Trail</h2>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Download JSON data backups, restore store database, and review immutable audit logs.
-          </p>
+      {uploadMsg && (
+        <div className="bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4" /> {uploadMsg}
         </div>
-
-        {uploadMsg && (
-          <div className="bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 animate-bounce">
-            <CheckCircle2 className="w-4 h-4" /> {uploadMsg}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* BACKUP & RESTORE ACTIONS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* DOWNLOAD BACKUP */}
         <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 space-y-3">
           <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
@@ -97,22 +84,6 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             Upload JSON Backup
             <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" />
           </label>
-        </div>
-
-        {/* RESET DATA */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-slate-900">
-            <RotateCcw className="w-5 h-5 text-rose-600" /> Reset Demo State
-          </div>
-          <p className="text-xs text-slate-500">
-            Re-seed application data back to default factory demo state.
-          </p>
-          <button
-            onClick={handleResetDatabase}
-            className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors"
-          >
-            Re-seed Demo Data
-          </button>
         </div>
       </div>
 

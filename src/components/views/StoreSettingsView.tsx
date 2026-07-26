@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Settings, Store, Save, CheckCircle2, Receipt, FileText } from 'lucide-react';
+import { Settings, Store, Save, CheckCircle2, FileText } from 'lucide-react';
+import { ReceiptINR } from '../ReceiptINR';
 import { StoreConfig } from '../../types';
 
 interface StoreSettingsViewProps {
@@ -168,7 +169,7 @@ export const StoreSettingsView: React.FC<StoreSettingsViewProps> = ({
                       : 'bg-slate-50 text-slate-700 border-slate-200'
                   }`}
                 >
-                  <Receipt className="w-4 h-4" /> 80mm Thermal Receipt
+                  <ReceiptINR className="w-4 h-4" /> 80mm Thermal Receipt
                 </button>
                 <button
                   type="button"

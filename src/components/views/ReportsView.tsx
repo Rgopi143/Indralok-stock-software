@@ -3,7 +3,6 @@ import {
   BarChart3,
   Calendar,
   Users,
-  Receipt,
   CreditCard,
   PieChart as PieIcon,
   FileSpreadsheet,
@@ -12,6 +11,7 @@ import {
   DollarSign,
   Percent,
 } from 'lucide-react';
+import { ReceiptINR } from '../ReceiptINR';
 import {
   BarChart,
   Bar,
@@ -241,7 +241,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ bills, salesmen, store
             </span>
           </div>
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl">
-            <Receipt className="w-6 h-6" />
+            <ReceiptINR className="w-6 h-6" />
           </div>
         </div>
 

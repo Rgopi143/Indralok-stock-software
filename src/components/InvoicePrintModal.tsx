@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Printer, Download, Receipt, FileText, CheckCircle2, Copy } from 'lucide-react';
+import { X, Printer, Download, FileText, CheckCircle2, Copy } from 'lucide-react';
+import { ReceiptINR } from './ReceiptINR';
 import { Bill, StoreConfig } from '../types';
 import { BarcodeRenderer } from './BarcodeRenderer';
 
@@ -44,7 +45,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({
         <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between no-print">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-emerald-500 text-slate-950 rounded-lg">
-              <Receipt className="w-5 h-5" />
+              <ReceiptINR className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-bold text-lg leading-snug">Tax Invoice #{bill.billNumber}</h3>
@@ -73,7 +74,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({
                   : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
               }`}
             >
-              <Receipt className="w-3.5 h-3.5" />
+              <ReceiptINR className="w-3.5 h-3.5" />
               80mm Thermal Receipt
             </button>
             <button

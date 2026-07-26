@@ -2,7 +2,6 @@ import React from 'react';
 import {
   LayoutDashboard,
   TrendingUp,
-  Receipt,
   Percent,
   Award,
   ArrowRight,
@@ -10,6 +9,7 @@ import {
   Printer,
   Sparkles,
 } from 'lucide-react';
+import { ReceiptINR } from '../ReceiptINR';
 import {
   BarChart,
   Bar,
@@ -104,7 +104,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           onClick={onNavigateToBilling}
           className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-600/20 transition-all"
         >
-          <Receipt className="w-4 h-4" /> Open Billing Counter (F2)
+          <ReceiptINR className="w-4 h-4" /> Open Billing Counter (F2)
         </button>
       </div>
 
@@ -135,7 +135,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
           </div>
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl">
-            <Receipt className="w-6 h-6" />
+            <ReceiptINR className="w-6 h-6" />
           </div>
         </div>
 

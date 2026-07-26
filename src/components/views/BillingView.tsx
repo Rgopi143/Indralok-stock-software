@@ -767,20 +767,26 @@ export const BillingView: React.FC<BillingViewProps> = ({
         </div>
 
         {/* PAY & PRINT ACTION BUTTON */}
-        <div className="pt-2">
+        <div className="pt-2 space-y-1">
           <button
             onClick={handleCheckout}
             disabled={items.length === 0}
+            title={items.length === 0 ? 'Scan or add at least 1 item to bill to enable payment' : 'Complete payment & print invoice'}
             className={`w-full py-3.5 rounded-2xl font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
               items.length === 0
-                ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/30 active:scale-98'
+                ? 'bg-slate-300 text-slate-500 cursor-not-allowed opacity-80'
+                : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/30 active:scale-98 cursor-pointer'
             }`}
             id="checkout-pay-print-btn"
           >
             <Printer className="w-5 h-5" />
             <span>Complete Payment & Print Bill (F8)</span>
           </button>
+          {items.length === 0 && (
+            <p className="text-[10px] text-slate-400 font-semibold text-center">
+              Add at least 1 item to bill to enable payment (F8)
+            </p>
+          )}
         </div>
       </div>
 

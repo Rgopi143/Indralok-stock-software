@@ -117,110 +117,41 @@ export const BarcodeScannerModal: React.FC<BarcodeScannerModalProps> = ({
           </div>
         )}
 
-        {/* Tab Selector */}
-        <div className="flex border-b border-slate-200 bg-slate-50">
-          <button
-            onClick={() => setActiveTab('camera')}
-            className={`flex-1 py-3 px-4 text-sm font-medium flex items-center justify-center gap-2 border-b-2 transition-colors ${
-              activeTab === 'camera'
-                ? 'border-indigo-600 text-indigo-600 bg-white font-semibold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Camera className="w-4 h-4" />
-            Webcam Scanner
-          </button>
-          <button
-            onClick={() => setActiveTab('simulation')}
-            className={`flex-1 py-3 px-4 text-sm font-medium flex items-center justify-center gap-2 border-b-2 transition-colors ${
-              activeTab === 'simulation'
-                ? 'border-indigo-600 text-indigo-600 bg-white font-semibold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            Quick Touch Scan
-          </button>
-        </div>
-
-        {/* Tab Body */}
+        {/* Scanner Body */}
         <div className="p-6">
-          {activeTab === 'camera' ? (
-            <div>
-              <div className="relative rounded-xl overflow-hidden bg-slate-950 min-h-[240px] flex items-center justify-center border border-slate-800">
-                <div id={scannerRegionId} className="w-full h-full min-h-[240px]" />
-                {cameraError && (
-                  <div className="absolute inset-0 p-6 flex flex-col items-center justify-center text-center bg-slate-900 text-slate-200">
-                    <Camera className="w-10 h-10 text-slate-500 mb-3" />
-                    <p className="text-xs text-amber-300 font-medium mb-2">{cameraError}</p>
-                    <p className="text-xs text-slate-400">
-                      Note: Physical USB Barcode scanners work automatically on any screen!
-                    </p>
-                  </div>
-                )}
+          <div className="relative rounded-xl overflow-hidden bg-slate-950 min-h-[240px] flex items-center justify-center border border-slate-800">
+            <div id={scannerRegionId} className="w-full h-full min-h-[240px]" />
+            {cameraError && (
+              <div className="absolute inset-0 p-6 flex flex-col items-center justify-center text-center bg-slate-900 text-slate-200">
+                <Camera className="w-10 h-10 text-slate-500 mb-3" />
+                <p className="text-xs text-amber-300 font-medium mb-2">{cameraError}</p>
+                <p className="text-xs text-slate-400">
+                  Note: Physical USB Barcode scanners work automatically on any screen!
+                </p>
               </div>
+            )}
+          </div>
 
-              {/* Manual input fallback */}
-              <form onSubmit={handleManualSubmit} className="mt-4 flex gap-2">
-                <div className="relative flex-1">
-                  <Keyboard className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={manualCode}
-                    onChange={(e) => setManualCode(e.target.value)}
-                    placeholder="Or type barcode & press Enter..."
-                    className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                    autoFocus
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
-                >
-                  Add
-                </button>
-              </form>
+          {/* Manual input fallback */}
+          <form onSubmit={handleManualSubmit} className="mt-4 flex gap-2">
+            <div className="relative flex-1">
+              <Keyboard className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={manualCode}
+                onChange={(e) => setManualCode(e.target.value)}
+                placeholder="Or type barcode tag & press Enter..."
+                className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold"
+                autoFocus
+              />
             </div>
-          ) : (
-            <div>
-              <p className="text-xs text-slate-500 mb-3 font-medium">
-                Click any registered product below to simulate scanning its barcode sticker:
-              </p>
-              <div className="max-h-[260px] overflow-y-auto space-y-2 pr-1">
-                {products.filter(p => p.status === 'active').map((product) => (
-                  <button
-                    key={product.id}
-                    onClick={() => {
-                      onScan(product.barcode);
-                      setScannedFeedback(`Scanned: ${product.name}`);
-                      setTimeout(() => setScannedFeedback(null), 1200);
-                    }}
-                    className="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all flex items-center justify-between group"
-                  >
-                    <div>
-                      <div className="font-semibold text-slate-800 text-sm group-hover:text-indigo-600">
-                        {product.name}
-                      </div>
-                      <div className="text-xs text-slate-500 flex items-center gap-2">
-                        <span className="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-700 font-medium">
-                          {product.barcode}
-                        </span>
-                        <span>• {product.category}</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-indigo-700 text-sm">
-                        ₹{product.sellingPrice}
-                      </div>
-                      <div className="text-[10px] text-slate-400 line-through">
-                        MRP ₹{product.mrp}
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+            >
+              Add Item
+            </button>
+          </form>
         </div>
 
         {/* Footer */}
