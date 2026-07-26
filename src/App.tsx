@@ -13,6 +13,7 @@ import { SalesmenView } from './components/views/SalesmenView';
 import { StoreSettingsView } from './components/views/StoreSettingsView';
 import { UserManagementView } from './components/views/UserManagementView';
 import { AuditLogView } from './components/views/AuditLogView';
+import { Store } from 'lucide-react';
 import { LoginPage } from './components/LoginPage';
 import { ShortcutsGuideModal } from './components/ShortcutsGuideModal';
 import {
@@ -35,11 +36,26 @@ export default function App() {
   const [bills, setBills] = useState<Bill[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
+  // Helper to look up saved user from initial data or local DB
+  const getPersistedUser = (userId: string | null): User | null => {
+    if (!userId || userId === 'null') return null;
+    const initMatch = initialUsers.find((u) => u.id === userId);
+    if (initMatch) return initMatch;
+    const localDbStr = localStorage.getItem('pos_db');
+    if (localDbStr) {
+      try {
+        const db = JSON.parse(localDbStr);
+        const match = db.users?.find((u: User) => u.id === userId);
+        if (match) return match;
+      } catch {}
+    }
+    return null;
+  };
+
   // Current User Session (Persisted in localStorage)
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     const savedUserId = localStorage.getItem('pos_current_user_id');
-    if (!savedUserId || savedUserId === 'null') return null;
-    return initialUsers.find((u) => u.id === savedUserId) || null;
+    return getPersistedUser(savedUserId);
   });
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(() => {
     const savedUserId = localStorage.getItem('pos_current_user_id');
@@ -156,6 +172,25 @@ export default function App() {
     });
     setStoreConfig(updated);
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen bg-slate-950 text-white flex flex-col items-center justify-center p-4 select-none font-sans">
+        <div className="space-y-4 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white flex items-center justify-center font-black text-2xl shadow-xl shadow-indigo-500/30 mx-auto animate-pulse">
+            <Store className="w-7 h-7" />
+          </div>
+          <div>
+            <h1 className="font-extrabold text-xl tracking-tight text-white">{storeConfig.storeName}</h1>
+            <p className="text-xs text-slate-400 font-medium mt-1">Loading POS Billing Terminal...</p>
+          </div>
+          <div className="flex items-center justify-center gap-1.5 pt-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-ping" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!currentUser || isLoginOpen) {
     return (
