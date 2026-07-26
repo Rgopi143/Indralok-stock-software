@@ -138,16 +138,29 @@ export default function App() {
     setStoreConfig(updated);
   };
 
+  // Theme State
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    return (localStorage.getItem('pos_theme') as 'light' | 'dark') || 'light';
+  });
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    localStorage.setItem('pos_theme', nextTheme);
+  };
+
   if (!currentUser || isLoginOpen) {
     return <LoginModal users={users} onLogin={(user) => { setCurrentUser(user); setIsLoginOpen(false); }} />;
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-900 font-sans antialiased text-slate-800 select-none">
+    <div className={`h-screen w-screen flex flex-col overflow-hidden font-sans antialiased text-slate-800 select-none ${theme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'}`}>
       {/* Top Navbar */}
       <Navbar
         user={currentUser}
         storeConfig={storeConfig}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         onLogout={() => setIsLoginOpen(true)}
         onOpenShortcutsModal={() => setIsShortcutsOpen(true)}
       />
@@ -159,6 +172,7 @@ export default function App() {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           role={currentUser.role}
+          theme={theme}
         />
 
         {/* Dynamic Main View */}
