@@ -164,17 +164,27 @@ export const BarcodeStickerPrintModal: React.FC<BarcodeStickerPrintModalProps> =
               <div id="printable-sticker-sheet" className="bg-white p-4 shadow-sm min-h-[400px]">
                 <style>{`
                   @media print {
-                    body * { visibility: hidden; }
+                    body * { visibility: hidden !important; }
                     .no-print { display: none !important; }
-                    #printable-sticker-sheet, #printable-sticker-sheet * { visibility: visible; }
+                    #printable-sticker-sheet, #printable-sticker-sheet * {
+                      visibility: visible !important;
+                    }
                     #printable-sticker-sheet {
-                      position: absolute;
-                      left: 0;
-                      top: 0;
-                      width: 100%;
-                      padding: 0;
-                      margin: 0;
+                      position: absolute !important;
+                      left: 0 !important;
+                      top: 0 !important;
+                      width: 100% !important;
+                      padding: 0 !important;
+                      margin: 0 !important;
                       box-shadow: none !important;
+                      border: none !important;
+                      background: white !important;
+                      overflow: visible !important;
+                      height: auto !important;
+                    }
+                    .sticker-card {
+                      page-break-inside: avoid !important;
+                      break-inside: avoid !important;
                     }
                   }
                 `}</style>
@@ -186,7 +196,7 @@ export const BarcodeStickerPrintModal: React.FC<BarcodeStickerPrintModalProps> =
                   {Array.from({ length: stickerCount }).map((_, idx) => (
                     <div
                       key={idx}
-                      className="border border-slate-300 p-2 text-center rounded bg-white flex flex-col items-center justify-center space-y-1 shadow-2xs"
+                      className="sticker-card border border-slate-300 p-2 text-center rounded bg-white flex flex-col items-center justify-center space-y-1 shadow-2xs"
                     >
                       {showStoreName && (
                         <div className="text-[9px] font-extrabold uppercase text-slate-800 tracking-tight truncate max-w-full">

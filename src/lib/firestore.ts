@@ -7,6 +7,8 @@ import {
   deleteDoc,
   query,
   where,
+  onSnapshot,
+  Unsubscribe,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { StoreConfig, Product, Salesman, User, Bill, AuditLog } from '../types';
@@ -250,5 +252,34 @@ export const firestoreApi = {
     const list: AuditLog[] = [];
     snap.forEach((d) => list.push(d.data() as AuditLog));
     return list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  },
+
+  // Real-time Cloud Firestore Subscriptions
+  subscribeProducts: (callback: (products: Product[]) => void): Unsubscribe => {
+    return onSnapshot(collection(db, COLS.PRODUCTS), (snap) => {
+      if (!snap.empty) {
+        const list: Product[] = [];
+        snap.forEach((d) => list.push(d.data() as Product));
+        callback(list);
+      }
+    });
+  },
+
+  subscribeBills: (callback: (bills: Bill[]) => void): Unsubscribe => {
+    return onSnapshot(collection(db, COLS.BILLS), (snap) => {
+      if (!snap.empty) {
+        const list: Bill[] = [];
+        snap.forEach((d) => list.push(d.data() as Bill));
+        callback(list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+      }
+    });
+  },
+
+  subscribeStoreConfig: (callback: (config: StoreConfig) => void): Unsubscribe => {
+    return onSnapshot(doc(db, COLS.STORE, 'main'), (snap) => {
+      if (snap.exists()) {
+        callback(snap.data() as StoreConfig);
+      }
+    });
   },
 };

@@ -20,3 +20,37 @@ html, body, #root {
   height: 100%;
   overflow: hidden;
 }
+
+/* GLOBAL PRINT ENGINE OPTIMIZATION */
+@media print {
+  @page {
+    margin: 5mm;
+  }
+
+  /* Expand body/html container so printing never clips pages */
+  html, body, #root {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Unbound all modal and layout scroll wrappers during print */
+  div, main, section, article {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Completely hide UI controls, toolbars, sidebars & backdrop */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Prevent row splitting and sticker slicing across page breaks */
+  tr, tbody tr, .sticker-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

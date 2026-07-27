@@ -116,18 +116,28 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 bg-slate-200/60 flex justify-center">
           <style>{`
             @media print {
-              body * { visibility: hidden; }
+              body * { visibility: hidden !important; }
               .no-print { display: none !important; }
-              #printable-invoice-container, #printable-invoice-container * { visibility: visible; }
+              #printable-invoice-container, #printable-invoice-container * {
+                visibility: visible !important;
+              }
               #printable-invoice-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 0;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: ${format === 'thermal_80mm' ? '80mm' : '100%'} !important;
+                max-width: ${format === 'thermal_80mm' ? '80mm' : '100%'} !important;
+                margin: 0 auto !important;
+                padding: ${format === 'thermal_80mm' ? '2mm' : '8mm'} !important;
                 box-shadow: none !important;
+                border: none !important;
                 background: white !important;
+                overflow: visible !important;
+                height: auto !important;
+              }
+              tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
               }
             }
           `}</style>

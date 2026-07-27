@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
@@ -13,9 +14,10 @@ export const firebaseConfig = {
   measurementId: "G-CKX3240LJV"
 };
 
-// Initialize Firebase App & Cloud Firestore Database
+// Initialize Firebase App, Cloud Firestore & Cloud Storage
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 export let analytics: Analytics | null = null;
 if (typeof window !== 'undefined') {
